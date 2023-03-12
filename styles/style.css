@@ -13,13 +13,15 @@
   flex-direction: row;
 }
 
-.flex-center, .board {
+.flex-center, .board,
+.piece-containers {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.absolute-center {
+.absolute-center, .board,
+.piece-containers {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -132,26 +134,78 @@ body {
   background-color: steelblue;
 }
 
-.board {
-  height: 700px;
-  width: 1050px;
+.backgammon-game {
+  position: relative;
+  height: 800px;
+  width: 1200px;
+  box-sizing: content-box;
+  border: 2px solid black;
+}
+
+.piece-containers .slot {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px;
+}
+.piece-containers .slot.hover {
+  filter: brightness(0.7);
+}
+.piece-containers .slot.top {
+  justify-content: flex-start;
+}
+.piece-containers .slot.bottom {
+  justify-content: flex-end;
+}
+.piece-containers .piece {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
+.board,
+.piece-containers {
+  height: 800px;
+  width: 1200px;
   border: 20px solid brown;
-  background-color: rgb(255, 179, 148);
   flex-direction: row;
 }
-.board .board-side {
+.board .board-side,
+.piece-containers .board-side {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  border: 2px solid black;
 }
-.board .row {
+.board .row,
+.piece-containers .row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   height: 40%;
+}
+.board .slot,
+.piece-containers .slot {
+  height: 100%;
+  width: 100%;
+}
+.board .middle-piece,
+.piece-containers .middle-piece {
+  width: 10%;
+  height: 100%;
+}
+.board .test,
+.piece-containers .test {
+  background-color: purple;
+}
+
+.board {
+  z-index: -1;
+  background-color: rgb(255, 179, 148);
+  border: 20px solid brown;
 }
 .board .row.top .slot:nth-child(2n) {
   background-color: rgb(255, 193, 140);
@@ -165,20 +219,18 @@ body {
 .board .row.bottom .slot:nth-child(2n+1) {
   background-color: rgb(255, 193, 140);
 }
+.board .board-side {
+  border: 2px solid black;
+}
+.board .middle-piece {
+  background-color: brown;
+}
 .board .slot {
   height: 100%;
   width: 100%;
-}
-.board .slot:nth-child(2n+1) {
-  background-color: brown;
 }
 .board .slot .triangle {
   height: 100%;
   width: 100%;
   border: 2px solid black;
-}
-.board .middle-piece {
-  width: 10%;
-  height: 100%;
-  background-color: brown;
 }/*# sourceMappingURL=style.css.map */

@@ -7,9 +7,11 @@ $darkSlotColor: rgb(150, 31, 1);
 $lightSlotColor: rgb(255, 193, 140);
 
 $boardRatio: calc(780 / 520);
-$boardSize: 700px;
+$boardSize: 800px;
 $boardWidth: $boardSize * $boardRatio;
 $boardHeight: calc($boardWidth / $boardRatio);
+
+$pieceSize: 50px;
 
 $boardBorder: 20px solid $borderColor;
 $thinBorder: 2px solid black;
@@ -32,12 +34,50 @@ body {
   background-color: steelblue;
 }
 
-.board {
+.backgammon-game {
+  position: relative;
+  height: $boardHeight;
+  width: $boardWidth;
+
+  box-sizing: content-box;
+  border: $thinBorder;
+}
+
+.piece-containers {
+  .slot {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px;
+
+    &.hover {
+      filter: brightness(0.7);
+    }
+  }
+
+  .slot.top {
+    justify-content: flex-start;
+  }
+
+  .slot.bottom {
+    justify-content: flex-end;
+  }
+
+  .piece {
+    height: $pieceSize;
+    width: $pieceSize;
+    border-radius: 50%;
+    border: $thinBorder;
+  }
+}
+
+.board,
+.piece-containers {
+  @extend .absolute-center;
   height: $boardHeight;
   width: $boardWidth;
   border: $boardBorder;
-
-  background-color: $boardColor;
 
   @extend .flex-center;
   flex-direction: row;
@@ -48,8 +88,6 @@ body {
     justify-content: space-between;
     height: 100%;
     width: 100%;
-
-    border: $thinBorder;
   }
 
   .row {
@@ -58,6 +96,26 @@ body {
     justify-content: space-between;
     height: 40%;
   }
+
+  .slot {
+    height: 100%;
+    width: 100%;
+  }
+
+  .middle-piece {
+    width: 10%;
+    height: 100%;
+  }
+
+  .test {
+    background-color: purple;
+  }
+}
+
+.board {
+  z-index: -1;
+  background-color: $boardColor;
+  border: $boardBorder;
 
   .row.top {
     .slot:nth-child(2n) {
@@ -79,24 +137,22 @@ body {
     }
   }
 
+  .board-side {
+    border: $thinBorder;
+  }
+
+  .middle-piece {
+    background-color: $borderColor;
+  }
+
   .slot {
     height: 100%;
     width: 100%;
-
-    &:nth-child(2n + 1) {
-      background-color: brown;
-    }
 
     .triangle {
       height: 100%;
       width: 100%;
       border: $thinBorder;
     }
-  }
-
-  .middle-piece {
-    width: 10%;
-    height: 100%;
-    background-color: $borderColor;
   }
 }
