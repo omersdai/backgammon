@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,700&display=swap");
+@import "./utilities";
+
+$borderColor: brown;
+$boardColor: rgb(255, 179, 148);
+$darkSlotColor: rgb(150, 31, 1);
+$lightSlotColor: rgb(255, 193, 140);
+
+$boardRatio: calc(780 / 520);
+$boardSize: 700px;
+$boardWidth: $boardSize * $boardRatio;
+$boardHeight: calc($boardWidth / $boardRatio);
+
+$boardBorder: 20px solid $borderColor;
+$thinBorder: 2px solid black;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+body {
+  font-family: "Roboto", serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: steelblue;
+}
+
+.board {
+  height: $boardHeight;
+  width: $boardWidth;
+  border: $boardBorder;
+
+  background-color: $boardColor;
+
+  @extend .flex-center;
+  flex-direction: row;
+
+  .board-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+
+    border: $thinBorder;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 40%;
+  }
+
+  .row.top {
+    .slot:nth-child(2n) {
+      background-color: $lightSlotColor;
+    }
+
+    .slot:nth-child(2n + 1) {
+      background-color: $darkSlotColor;
+    }
+  }
+
+  .row.bottom {
+    .slot:nth-child(2n) {
+      background-color: $darkSlotColor;
+    }
+
+    .slot:nth-child(2n + 1) {
+      background-color: $lightSlotColor;
+    }
+  }
+
+  .slot {
+    height: 100%;
+    width: 100%;
+
+    &:nth-child(2n + 1) {
+      background-color: brown;
+    }
+
+    .triangle {
+      height: 100%;
+      width: 100%;
+      border: $thinBorder;
+    }
+  }
+
+  .middle-piece {
+    width: 10%;
+    height: 100%;
+    background-color: $borderColor;
+  }
+}

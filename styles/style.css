@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,700&display=swap");
+.hide {
+  display: none !important;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-center, .board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.bg-pink {
+  background-color: rgb(228, 101, 122) !important;
+}
+
+.bg-red {
+  background-color: rgb(255, 41, 41) !important;
+}
+
+.bg-orange {
+  background-color: rgb(255, 166, 0) !important;
+}
+
+.bg-yellow {
+  background-color: rgb(255, 255, 0) !important;
+}
+
+.bg-green {
+  background-color: rgb(61, 216, 61) !important;
+}
+
+.bg-blue {
+  background-color: rgb(0, 191, 255) !important;
+}
+
+.bg-purple {
+  background-color: rgb(161, 68, 173) !important;
+}
+
+.bg-dark-blue {
+  background-color: rgb(60, 60, 192) !important;
+}
+
+.bg-black {
+  background-color: rgb(27, 27, 27) !important;
+}
+
+.bg-white {
+  background-color: rgb(236, 236, 236) !important;
+}
+
+.bg-gray {
+  background-color: rgb(128, 128, 128) !important;
+}
+
+.pink {
+  color: rgb(228, 101, 122) !important;
+}
+
+.red {
+  color: rgb(255, 41, 41) !important;
+}
+
+.orange {
+  color: rgb(255, 166, 0) !important;
+}
+
+.yellow {
+  color: rgb(255, 255, 0) !important;
+}
+
+.green {
+  color: rgb(61, 216, 61) !important;
+}
+
+.blue {
+  color: rgb(0, 191, 255) !important;
+}
+
+.purple {
+  color: rgb(161, 68, 173) !important;
+}
+
+.dark-blue {
+  color: rgb(60, 60, 192) !important;
+}
+
+.black {
+  color: rgb(27, 27, 27) !important;
+}
+
+.white {
+  color: rgb(236, 236, 236) !important;
+}
+
+.gray {
+  color: rgb(128, 128, 128) !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+body {
+  font-family: "Roboto", serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: steelblue;
+}
+
+.board {
+  height: 700px;
+  width: 1050px;
+  border: 20px solid brown;
+  background-color: rgb(255, 179, 148);
+  flex-direction: row;
+}
+.board .board-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  border: 2px solid black;
+}
+.board .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 40%;
+}
+.board .row.top .slot:nth-child(2n) {
+  background-color: rgb(255, 193, 140);
+}
+.board .row.top .slot:nth-child(2n+1) {
+  background-color: rgb(150, 31, 1);
+}
+.board .row.bottom .slot:nth-child(2n) {
+  background-color: rgb(150, 31, 1);
+}
+.board .row.bottom .slot:nth-child(2n+1) {
+  background-color: rgb(255, 193, 140);
+}
+.board .slot {
+  height: 100%;
+  width: 100%;
+}
+.board .slot:nth-child(2n+1) {
+  background-color: brown;
+}
+.board .slot .triangle {
+  height: 100%;
+  width: 100%;
+  border: 2px solid black;
+}
+.board .middle-piece {
+  width: 10%;
+  height: 100%;
+  background-color: brown;
+}/*# sourceMappingURL=style.css.map */
