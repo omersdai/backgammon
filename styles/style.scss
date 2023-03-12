@@ -12,6 +12,7 @@ $boardWidth: $boardSize * $boardRatio;
 $boardHeight: calc($boardWidth / $boardRatio);
 
 $pieceSize: 50px;
+$diceSize: 50px;
 
 $boardBorder: 20px solid $borderColor;
 $thinBorder: 2px solid black;
@@ -56,19 +57,76 @@ body {
     }
   }
 
-  .slot.top {
-    justify-content: flex-start;
-  }
-
   .slot.bottom {
     justify-content: flex-end;
   }
 
   .piece {
+    cursor: pointer;
     height: $pieceSize;
     width: $pieceSize;
     border-radius: 50%;
     border: $thinBorder;
+  }
+
+  .dice-container {
+    @extend .flex-center;
+
+    .roll-btn {
+      @extend %btn;
+      border: $thinBorder;
+    }
+
+    .white-btn {
+      @include set-background($white);
+    }
+
+    .black-btn {
+      @include set-background($black);
+    }
+
+    .dices {
+      display: flex;
+      flex-direction: row;
+      gap: 70px;
+    }
+
+    .dice {
+      position: relative;
+      @extend .flex-center;
+      height: $diceSize;
+      width: $diceSize;
+
+      &::before {
+        color: black;
+        background-color: black;
+      }
+
+      i {
+        color: white;
+      }
+    }
+
+    .dice::before {
+      content: "ss";
+      font-size: $diceSize - 20px;
+    }
+
+    i {
+      @extend .absolute-center;
+      font-size: $diceSize;
+    }
+
+    .black-dice {
+      &::before {
+        color: white;
+        background-color: white;
+      }
+
+      i {
+        color: black;
+      }
+    }
   }
 }
 

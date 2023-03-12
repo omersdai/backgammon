@@ -13,15 +13,32 @@
   flex-direction: row;
 }
 
+.piece-containers .dice-container .roll-btn {
+  font-size: 15px;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.piece-containers .dice-container .roll-btn:active {
+  transform: scale(95%);
+}
+.piece-containers .dice-container .roll-btn:hover {
+  filter: brightness(0.95);
+}
+.piece-containers .dice-container .roll-btn:disabled {
+  cursor: default;
+}
+
 .flex-center, .board,
-.piece-containers {
+.piece-containers, .piece-containers .dice-container .dice, .piece-containers .dice-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .absolute-center, .board,
-.piece-containers {
+.piece-containers, .piece-containers .dice-container i {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -152,17 +169,57 @@ body {
 .piece-containers .slot.hover {
   filter: brightness(0.7);
 }
-.piece-containers .slot.top {
-  justify-content: flex-start;
-}
 .piece-containers .slot.bottom {
   justify-content: flex-end;
 }
 .piece-containers .piece {
+  cursor: pointer;
   height: 50px;
   width: 50px;
   border-radius: 50%;
   border: 2px solid black;
+}
+.piece-containers .dice-container .roll-btn {
+  border: 2px solid black;
+}
+.piece-containers .dice-container .white-btn {
+  background-color: rgb(236, 236, 236);
+  color: #000;
+}
+.piece-containers .dice-container .black-btn {
+  background-color: rgb(27, 27, 27);
+  color: #fff;
+}
+.piece-containers .dice-container .dices {
+  display: flex;
+  flex-direction: row;
+  gap: 70px;
+}
+.piece-containers .dice-container .dice {
+  position: relative;
+  height: 50px;
+  width: 50px;
+}
+.piece-containers .dice-container .dice::before {
+  color: black;
+  background-color: black;
+}
+.piece-containers .dice-container .dice i {
+  color: white;
+}
+.piece-containers .dice-container .dice::before {
+  content: "ss";
+  font-size: 30px;
+}
+.piece-containers .dice-container i {
+  font-size: 50px;
+}
+.piece-containers .dice-container .black-dice::before {
+  color: white;
+  background-color: white;
+}
+.piece-containers .dice-container .black-dice i {
+  color: black;
 }
 
 .board,
