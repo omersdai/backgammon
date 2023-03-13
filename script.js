@@ -56,15 +56,76 @@ function startGame() {
   placePieces();
 }
 
+function movePiece(pieceEl, destinationSlotEl) {
+  const color = pieceEl.getAttribute("color");
+  const originSlotEl = pieceEl.parentElement;
+
+  const [from, to] = [
+    originSlotEl.getAttribute("index"),
+    destinationSlotEl.getAttribute("index"),
+  ];
+  const distance = to - from;
+
+  if (
+    !isTurnDecided ||
+    (color === WHITE) !== isWhiteTurn ||
+    !isRolledDice ||
+    !isValidMove(color, distance) ||
+    isOccupied(color, destinationSlotEl)
+  )
+    return;
+
+  originSlotEl.removeChild(pieceEl);
+  destinationSlotEl.appendChild(pieceEl);
+
+  // Use roll
+  const idx = rolls.indexOf(Math.abs(distance));
+  rolls.splice(idx, 1);
+
+  // TODO check if piece is captured
+
+  if (rolls.length === 0) {
+    isWhiteTurn = !isWhiteTurn;
+    isRolledDice = false;
+    const oppositeRollBtn = isWhiteTurn ? whiteRollBtn : blackRollBtn;
+    oppositeRollBtn.disabled = false;
+  }
+}
+
+function isValidMove(color, distance) {
+  const dir = color === WHITE ? -1 : 1;
+  return rolls.some((roll) => distance === roll * dir);
+}
+
+function isOccupied(color, destinationSlotEl) {
+  const pieceElements = destinationSlotEl.children;
+  return (
+    pieceElements.length > 1 && color !== pieceElements[0].getAttribute("color")
+  );
+}
+
 function rollDice(e) {
   const btnEl = e.currentTarget;
   if (!isTurnDecided) {
     decideTurn(btnEl);
-    return;
+  } else {
+    startTurn(btnEl);
   }
-  return;
+}
 
-  // btnEl.classList.add("hide");
+function startTurn(btnEl) {
+  // Do it once somehow
+  whiteRollBtn.nextElementSibling.firstElementChild.classList.remove("hide");
+  blackRollBtn.nextElementSibling.firstElementChild.classList.remove("hide");
+
+  const oppositeRollBtn = btnEl === whiteRollBtn ? blackRollBtn : whiteRollBtn;
+  const oppositeDices = oppositeRollBtn.nextElementSibling;
+
+  btnEl.classList.add("hide");
+  oppositeRollBtn.classList.remove("hide");
+  oppositeRollBtn.disabled = true;
+  oppositeDices.classList.add("hide");
+
   const [dices, diceEl1, diceEl2] = getDices(btnEl);
   const [roll1, roll2] = [getRandomNumber(1, 6), getRandomNumber(1, 6)];
 
@@ -72,6 +133,9 @@ function rollDice(e) {
   showDice(diceEl2, roll2);
 
   dices.classList.remove("hide");
+
+  isRolledDice = true;
+  rolls = roll1 !== roll2 ? [roll1, roll2] : [roll1, roll1, roll1, roll1];
 }
 
 function decideTurn(btnEl) {
@@ -88,7 +152,6 @@ function decideTurn(btnEl) {
     rolls[0] = roll;
   } else {
     rolls[1] = roll;
-
     if (rolls[0] > rolls[1]) {
       isTurnDecided = true;
       isWhiteTurn = true;
@@ -161,7 +224,6 @@ function initializeGame() {
 //////////////////
 // Event Listeners
 //////////////////
-
 whiteRollBtn.addEventListener(CLICK, rollDice);
 blackRollBtn.addEventListener(CLICK, rollDice);
 
@@ -188,7 +250,8 @@ function drop(e) {
   if (!draggedPiece) return;
   //   e.currentTarget.classList.remove("hover");
   const idx = parseInt(e.currentTarget.getAttribute("index"));
-  movePiece(draggedPiece, idx);
+  console.log(idx);
+  movePiece(draggedPiece, e.currentTarget);
 }
 
 function dragOver(e) {
