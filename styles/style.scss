@@ -63,10 +63,21 @@ body {
 
   .piece {
     cursor: pointer;
+    z-index: 10;
     height: $pieceSize;
     width: $pieceSize;
     border-radius: 50%;
     border: $thinBorder;
+  }
+
+  .middle-piece {
+    @extend .flex-center;
+  }
+
+  .captured-pieces {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .dice-container {

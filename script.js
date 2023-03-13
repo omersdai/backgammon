@@ -1,6 +1,7 @@
 const pieceContainersEl = document.getElementById("pieceContainers");
 const whiteRollBtn = document.getElementById("whiteRollBtn");
 const blackRollBtn = document.getElementById("blackRollBtn");
+const capturedPiecesEl = document.getElementById("capturedPieces");
 
 const rowElements = pieceContainersEl.querySelectorAll(".row");
 const slotElements = [
@@ -9,6 +10,7 @@ const slotElements = [
   ...Array.from(rowElements[1].querySelectorAll(".slot")),
   ...Array.from(rowElements[3].querySelectorAll(".slot")),
 ];
+const slotCount = slotElements.length;
 
 const CLICK = "click";
 
@@ -31,6 +33,8 @@ const diceIcons = [
 ];
 
 const [WHITE, BLACK] = ["white", "black"];
+
+capturedPiecesEl.appendChild(createPiece(WHITE));
 
 let draggedPiece;
 let rolls;
@@ -58,31 +62,40 @@ function startGame() {
 
 function movePiece(pieceEl, destinationSlotEl) {
   const color = pieceEl.getAttribute("color");
-  const originSlotEl = pieceEl.parentElement;
 
-  const [from, to] = [
-    originSlotEl.getAttribute("index"),
-    destinationSlotEl.getAttribute("index"),
-  ];
-  const distance = to - from;
-
-  if (
-    !isTurnDecided ||
-    (color === WHITE) !== isWhiteTurn ||
-    !isRolledDice ||
-    !isValidMove(color, distance) ||
-    isOccupied(color, destinationSlotEl)
-  )
+  if (!isTurnDecided || (color === WHITE) !== isWhiteTurn || !isRolledDice)
     return;
 
-  originSlotEl.removeChild(pieceEl);
-  destinationSlotEl.appendChild(pieceEl);
+  const originSlotEl = pieceEl.parentElement;
+  const slotIdx = destinationSlotEl.getAttribute("index");
+  let distance;
+
+  if (originSlotEl === capturedPiecesEl) {
+    distance = color === BLACK ? slotIdx + 1 : slotIdx - slotCount;
+  } else {
+    distance = slotIdx - originSlotEl.getAttribute("index");
+  }
+
+  if (
+    !isValidMove(color, distance) ||
+    isOccupied(color, destinationSlotEl) ||
+    (originSlotEl !== capturedPiecesEl && hasCapturedPiece(color))
+  )
+    return;
 
   // Use roll
   const idx = rolls.indexOf(Math.abs(distance));
   rolls.splice(idx, 1);
 
-  // TODO check if piece is captured
+  // Check if capturing piece
+  if (isBlot(color, destinationSlotEl)) {
+    const capturedPiece = destinationSlotEl.firstElementChild;
+    destinationSlotEl.removeChild(capturedPiece);
+    capturedPiecesEl.appendChild(capturedPiece);
+  }
+
+  originSlotEl.removeChild(pieceEl);
+  destinationSlotEl.appendChild(pieceEl);
 
   if (rolls.length === 0) {
     isWhiteTurn = !isWhiteTurn;
@@ -90,17 +103,53 @@ function movePiece(pieceEl, destinationSlotEl) {
     const oppositeRollBtn = isWhiteTurn ? whiteRollBtn : blackRollBtn;
     oppositeRollBtn.disabled = false;
   }
+
+  console.log(rolls);
 }
 
 function isValidMove(color, distance) {
   const dir = color === WHITE ? -1 : 1;
-  return rolls.some((roll) => distance === roll * dir);
+  distance = distance * dir;
+  console.log(
+    "isvalidMove returned ",
+    rolls.some((roll) => distance === roll)
+  );
+  return rolls.some((roll) => distance === roll);
 }
 
 function isOccupied(color, destinationSlotEl) {
   const pieceElements = destinationSlotEl.children;
+
+  console.log(
+    "isOccupied returned",
+    pieceElements.length > 1 && color !== pieceElements[0].getAttribute("color")
+  );
+
   return (
     pieceElements.length > 1 && color !== pieceElements[0].getAttribute("color")
+  );
+}
+
+function hasCapturedPiece(color) {
+  const capturedPieceElements = capturedPiecesEl.children;
+
+  console.log(
+    "hasCapturedPiece returned",
+    capturedPieceElements.length > 0 &&
+      color === capturedPieceElements[0].getAttribute("color")
+  );
+
+  return (
+    capturedPieceElements.length > 0 &&
+    color === capturedPieceElements[0].getAttribute("color")
+  );
+}
+
+function isBlot(color, destinationSlotEl) {
+  const pieceElements = destinationSlotEl.children;
+  return (
+    pieceElements.length === 1 &&
+    color !== pieceElements[0].getAttribute("color")
   );
 }
 
@@ -117,6 +166,7 @@ function startTurn(btnEl) {
   // Do it once somehow
   whiteRollBtn.nextElementSibling.firstElementChild.classList.remove("hide");
   blackRollBtn.nextElementSibling.firstElementChild.classList.remove("hide");
+  ////
 
   const oppositeRollBtn = btnEl === whiteRollBtn ? blackRollBtn : whiteRollBtn;
   const oppositeDices = oppositeRollBtn.nextElementSibling;
@@ -182,12 +232,10 @@ function showDice(diceEl, roll) {
 }
 
 function placePieces() {
-  const n = slotElements.length;
-
   for (const [idx, count] of piecePlacements) {
     for (let i = 0; i < count; i++) {
       slotElements[idx].appendChild(createPiece(BLACK));
-      slotElements[n - 1 - idx].appendChild(createPiece(WHITE));
+      slotElements[slotCount - 1 - idx].appendChild(createPiece(WHITE));
     }
   }
 }
@@ -249,6 +297,7 @@ function drop(e) {
   e.preventDefault();
   if (!draggedPiece) return;
   //   e.currentTarget.classList.remove("hover");
+  console.log("dropped", draggedPiece);
   const idx = parseInt(e.currentTarget.getAttribute("index"));
   console.log(idx);
   movePiece(draggedPiece, e.currentTarget);

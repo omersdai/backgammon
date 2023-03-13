@@ -33,7 +33,7 @@
 }
 
 .flex-center, .board,
-.piece-containers, .piece-containers .dice-container .dice, .piece-containers .dice-container {
+.piece-containers, .piece-containers .dice-container .dice, .piece-containers .dice-container, .piece-containers .middle-piece {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -176,10 +176,16 @@ body {
 }
 .piece-containers .piece {
   cursor: pointer;
+  z-index: 10;
   height: 50px;
   width: 50px;
   border-radius: 50%;
   border: 2px solid black;
+}
+.piece-containers .captured-pieces {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .piece-containers .dice-container .roll-btn {
   border: 2px solid black;
