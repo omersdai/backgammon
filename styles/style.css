@@ -28,6 +28,8 @@
 }
 .piece-containers .dice-container .roll-btn:disabled {
   cursor: default;
+  transform: none;
+  filter: brightness(0.5);
 }
 
 .flex-center, .board,
@@ -181,6 +183,7 @@ body {
 }
 .piece-containers .dice-container .roll-btn {
   border: 2px solid black;
+  margin-right: 20px;
 }
 .piece-containers .dice-container .white-btn {
   background-color: rgb(236, 236, 236);
@@ -201,18 +204,14 @@ body {
   width: 50px;
 }
 .piece-containers .dice-container .dice::before {
+  content: "ss";
+  font-size: 30px;
   color: black;
   background-color: black;
 }
-.piece-containers .dice-container .dice i {
-  color: white;
-}
-.piece-containers .dice-container .dice::before {
-  content: "ss";
-  font-size: 30px;
-}
 .piece-containers .dice-container i {
   font-size: 50px;
+  color: white;
 }
 .piece-containers .dice-container .black-dice::before {
   color: white;

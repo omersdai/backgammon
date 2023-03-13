@@ -42,35 +42,74 @@ initializeGame();
 
 function startGame() {
   draggedPiece = null;
-  rolls = null;
+  rolls = [null, null];
   isTurnDecided = false;
+  isRolledDice = false;
+  isWhiteTurn = null;
+
+  blackRollBtn.disabled = true;
+  // Hide first dices for each color to decide turn
+  whiteRollBtn.nextElementSibling.firstElementChild.classList.add("hide");
+  blackRollBtn.nextElementSibling.firstElementChild.classList.add("hide");
+
   clearPieces();
   placePieces();
 }
 
 function rollDice(e) {
-  console.log("clicked!!");
   const btnEl = e.currentTarget;
-  const [roll1, roll2] = [getRandomNumber(1, 6), getRandomNumber(1, 6)];
-  showDices(btnEl, roll1, roll2);
-}
+  if (!isTurnDecided) {
+    decideTurn(btnEl);
+    return;
+  }
+  return;
 
-function showDices(btnEl, roll1, roll2) {
   // btnEl.classList.add("hide");
-  const dices = btnEl.nextElementSibling;
-  const diceEl1 = dices.firstElementChild;
-  const diceEl2 = diceEl1.nextElementSibling;
+  const [dices, diceEl1, diceEl2] = getDices(btnEl);
+  const [roll1, roll2] = [getRandomNumber(1, 6), getRandomNumber(1, 6)];
 
-  diceEl1.innerHTML = diceIcons[roll1];
-  diceEl2.innerHTML = diceIcons[roll2];
-
-  landDice(diceEl1);
-  landDice(diceEl2);
+  showDice(diceEl1, roll1);
+  showDice(diceEl2, roll2);
 
   dices.classList.remove("hide");
 }
 
-function landDice(diceEl) {
+function decideTurn(btnEl) {
+  const roll = getRandomNumber(1, 6);
+  const [dices, diceEl1, diceEl2] = getDices(btnEl);
+  diceEl2.innerHTML = diceIcons[roll];
+  dices.classList.remove("hide");
+
+  if (btnEl === whiteRollBtn) {
+    whiteRollBtn.disabled = true;
+    blackRollBtn.disabled = false;
+    const blackDices = blackRollBtn.nextElementSibling;
+    blackDices.classList.add("hide");
+    rolls[0] = roll;
+  } else {
+    rolls[1] = roll;
+
+    if (rolls[0] > rolls[1]) {
+      isTurnDecided = true;
+      isWhiteTurn = true;
+      whiteRollBtn.disabled = false;
+      blackRollBtn.disabled = true;
+    } else if (rolls[0] < rolls[1]) {
+      isTurnDecided = true;
+      isWhiteTurn = false;
+      whiteRollBtn.disabled = true;
+      blackRollBtn.disabled = false;
+    } else {
+      // rolls[0] === rolls[1]
+      whiteRollBtn.disabled = false;
+      blackRollBtn.disabled = true;
+    }
+  }
+}
+
+function showDice(diceEl, roll) {
+  diceEl.innerHTML = diceIcons[roll];
+
   const [xTransform, yTransform] = [
     getRandomNumber(-30, 30),
     getRandomNumber(-40, 40),
@@ -154,6 +193,13 @@ function drop(e) {
 
 function dragOver(e) {
   e.preventDefault();
+}
+
+function getDices(btnEl) {
+  const dices = btnEl.nextElementSibling;
+  const diceEl1 = dices.firstElementChild;
+  const diceEl2 = diceEl1.nextElementSibling;
+  return [dices, diceEl1, diceEl2];
 }
 
 function getRandomNumber(min, max) {

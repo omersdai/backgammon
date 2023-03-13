@@ -75,6 +75,7 @@ body {
     .roll-btn {
       @extend %btn;
       border: $thinBorder;
+      margin-right: 20px;
     }
 
     .white-btn {
@@ -96,25 +97,19 @@ body {
       @extend .flex-center;
       height: $diceSize;
       width: $diceSize;
-
-      &::before {
-        color: black;
-        background-color: black;
-      }
-
-      i {
-        color: white;
-      }
     }
 
     .dice::before {
       content: "ss";
       font-size: $diceSize - 20px;
+      color: black;
+      background-color: black;
     }
 
     i {
       @extend .absolute-center;
       font-size: $diceSize;
+      color: white;
     }
 
     .black-dice {
