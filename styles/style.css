@@ -32,7 +32,7 @@
   filter: brightness(0.5);
 }
 
-.flex-center, .board,
+.flex-center, .piece-pool, .board,
 .piece-containers, .piece-containers .dice-container .dice, .piece-containers .dice-container, .piece-containers .middle-piece {
   display: flex;
   justify-content: center;
@@ -154,6 +154,22 @@ body {
 }
 
 .backgammon-game {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.piece {
+  cursor: pointer;
+  z-index: 10;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
+.board-container {
   position: relative;
   height: 800px;
   width: 1200px;
@@ -173,14 +189,6 @@ body {
 }
 .piece-containers .slot.bottom {
   justify-content: flex-end;
-}
-.piece-containers .piece {
-  cursor: pointer;
-  z-index: 10;
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  border: 2px solid black;
 }
 .piece-containers .captured-pieces {
   display: flex;
@@ -259,10 +267,6 @@ body {
   width: 10%;
   height: 100%;
 }
-.board .test,
-.piece-containers .test {
-  background-color: purple;
-}
 
 .board {
   z-index: -1;
@@ -287,12 +291,39 @@ body {
 .board .middle-piece {
   background-color: brown;
 }
-.board .slot {
-  height: 100%;
-  width: 100%;
-}
 .board .slot .triangle {
   height: 100%;
   width: 100%;
   border: 2px solid black;
+}
+
+.piece-pool {
+  height: 800px;
+  width: 200px;
+  border: 2px solid black;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgb(161, 68, 173);
+}
+.piece-pool .pool-curve {
+  border-radius: 10px;
+  border: 2px solid black;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.piece-pool .side {
+  height: 50%;
+  width: 0;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+.piece-pool .side.bottom {
+  justify-content: flex-end;
 }/*# sourceMappingURL=style.css.map */
