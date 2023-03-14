@@ -3,6 +3,10 @@ const whiteRollBtn = document.getElementById("whiteRollBtn");
 const blackRollBtn = document.getElementById("blackRollBtn");
 const capturedPiecesEl = document.getElementById("capturedPieces");
 
+const poolContainerEl = document.getElementById("pool");
+const whitePoolEl = document.getElementById("whitePool");
+const blackPoolEl = document.getElementById("blackPool");
+
 const rowElements = pieceContainersEl.querySelectorAll(".row");
 const slotElements = [
   ...Array.from(rowElements[2].querySelectorAll(".slot")).reverse(),
@@ -12,15 +16,19 @@ const slotElements = [
 ];
 const slotCount = slotElements.length;
 
-const CLICK = "click";
+const [CLICK, INDEX] = ["click", "index"];
 
 // [slotIdx, numberOfPieces]
 const piecePlacements = [
-  [0, 2],
-  [11, 5],
-  [16, 3],
+  [16, 1],
   [18, 5],
 ];
+// const piecePlacements = [
+//   [0, 2],
+//   [11, 5],
+//   [16, 3],
+//   [18, 5],
+// ];
 
 const diceIcons = [
   "",
@@ -56,7 +64,7 @@ function startGame() {
 
   clearPieces();
   placePieces();
-  capturedPiecesEl.appendChild(createPiece(WHITE));
+  //   capturedPiecesEl.appendChild(createPiece(BLACK));
 }
 
 function movePiece(pieceEl, destinationSlotEl) {
@@ -65,14 +73,19 @@ function movePiece(pieceEl, destinationSlotEl) {
   if (!isTurnDecided || (color === WHITE) !== isWhiteTurn || !isRolledDice)
     return;
 
+  if (destinationSlotEl === poolContainerEl) {
+    if (canPool(color)) pool(pieceEl);
+    return;
+  }
+
   const originSlotEl = pieceEl.parentElement;
-  const slotIdx = destinationSlotEl.getAttribute("index");
+  const slotIdx = getIdx(destinationSlotEl);
   let distance;
 
   if (originSlotEl === capturedPiecesEl) {
     distance = color === BLACK ? slotIdx + 1 : slotIdx - slotCount;
   } else {
-    distance = slotIdx - originSlotEl.getAttribute("index");
+    distance = slotIdx - getIdx(originSlotEl);
   }
 
   if (
@@ -101,11 +114,39 @@ function movePiece(pieceEl, destinationSlotEl) {
   console.log(rolls);
 }
 
+function pool(pieceEl) {
+  const color = pieceEl.getAttribute("color");
+  const poolEl = color === WHITE ? whitePoolEl : blackPoolEl;
+  const originSlotEl = pieceEl.parentElement;
+  if (originSlotEl === capturedPiecesEl || hasCapturedPiece(color)) return;
+
+  const slotIdx = getIdx(originSlotEl);
+  const dir = color === BLACK ? 1 : -1;
+  rolls.sort((a, b) => a - b); // ascending order
+
+  let idx = null;
+  for (let i = 0; i < rolls.length; i++) {
+    const destinationIdx = slotIdx + rolls[i] * dir;
+    if (isPoolMove(color, destinationIdx)) {
+      idx = i;
+      break;
+    }
+  }
+
+  if (idx === null) return;
+
+  rolls.splice(idx, 1);
+  originSlotEl.removeChild(pieceEl);
+  poolEl.appendChild(pieceEl);
+  if (!hasMoves(color)) finishTurn();
+}
+
 function isValidMove(color, distance) {
-  const dir = color === WHITE ? -1 : 1;
+  const dir = color === BLACK ? 1 : -1;
   distance = distance * dir;
   console.log(
     "isvalidMove returned ",
+    distance,
     rolls.some((roll) => distance === roll)
   );
   return rolls.some((roll) => distance === roll);
@@ -148,29 +189,24 @@ function isBlot(color, destinationSlotEl) {
 function hasMoves(color) {
   if (hasCapturedPiece(color)) {
     for (const roll of rolls) {
-      const slotIdx = color === BLACK ? roll - 1 : slotCount - roll;
-      if (!isOccupied(color, slotElements[slotIdx])) return true;
+      const destinationIdx = color === BLACK ? roll - 1 : slotCount - roll;
+      if (!isOccupied(color, slotElements[destinationIdx])) return true;
     }
 
     return false;
   }
 
   for (let i = 0; i < slotCount; i++) {
-    const slotElement = slotElements[i];
-    const pieceElements = Array.from(slotElement.children);
-
-    if (
-      pieceElements.some((pieceEl) => color === pieceEl.getAttribute("color"))
-    ) {
+    if (hasPiece(slotElements[i], color)) {
       const dir = color === BLACK ? 1 : -1;
 
       for (const roll of rolls) {
-        const slotIdx = i + roll * dir; // destination
-        // TODO Check for end game situations when you start coding that
+        const destinationIdx = i + roll * dir; // destination
         if (
-          0 <= slotIdx &&
-          slotIdx < slotCount &&
-          !isOccupied(color, slotElements[slotIdx])
+          (canPool(color) && isPoolMove(color, destinationIdx)) ||
+          (0 <= destinationIdx &&
+            destinationIdx < slotCount &&
+            !isOccupied(color, slotElements[destinationIdx]))
         )
           return true;
       }
@@ -178,6 +214,39 @@ function hasMoves(color) {
   }
 
   return false;
+}
+
+function canPool(color) {
+  const start = color === BLACK ? 0 : 6;
+  const end = color === BLACK ? slotCount - 6 : slotCount;
+
+  for (let i = start; i < end; i++) {
+    if (hasPiece(slotElements[i], color)) return false;
+  }
+
+  console.log("can pool returned true");
+
+  return true;
+}
+
+function isPoolMove(color, destinationIdx) {
+  console.log(
+    "isPoolMove returned",
+    (color === BLACK && destinationIdx >= slotCount) ||
+      (color === WHITE && destinationIdx < 0)
+  );
+
+  return (
+    (color === BLACK && destinationIdx >= slotCount) ||
+    (color === WHITE && destinationIdx < 0)
+  );
+}
+
+function hasPiece(slotEl, color) {
+  const pieceElements = slotEl.children;
+  return (
+    0 < pieceElements.length && color === pieceElements[0].getAttribute("color")
+  );
 }
 
 function rollDice(e) {
@@ -295,7 +364,7 @@ function createPiece(color) {
 
 function initializeGame() {
   slotElements.forEach((slotElement, idx) => {
-    slotElement.setAttribute("index", idx);
+    slotElement.setAttribute(INDEX, idx);
 
     slotElement.addEventListener("dragenter", dragEnter);
     slotElement.addEventListener("dragleave", dragLeave);
@@ -303,6 +372,11 @@ function initializeGame() {
     // Dragging is not enabled by default
     slotElement.addEventListener("dragover", dragOver);
   });
+
+  poolContainerEl.addEventListener("dragenter", dragEnter);
+  poolContainerEl.addEventListener("dragleave", dragLeave);
+  poolContainerEl.addEventListener("drop", drop);
+  poolContainerEl.addEventListener("dragover", dragOver);
 
   startGame();
 }
@@ -335,8 +409,7 @@ function drop(e) {
   e.preventDefault();
   if (!draggedPiece) return;
   //   e.currentTarget.classList.remove("hover");
-  console.log("dropped", draggedPiece);
-  const idx = parseInt(e.currentTarget.getAttribute("index"));
+  const idx = getIdx(e.currentTarget);
   console.log(idx);
   movePiece(draggedPiece, e.currentTarget);
 }
@@ -350,6 +423,10 @@ function getDices(btnEl) {
   const diceEl1 = dices.firstElementChild;
   const diceEl2 = diceEl1.nextElementSibling;
   return [dices, diceEl1, diceEl2];
+}
+
+function getIdx(slotEl) {
+  return parseInt(slotEl.getAttribute(INDEX));
 }
 
 function getRandomNumber(min, max) {
