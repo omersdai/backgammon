@@ -15,113 +15,132 @@
     <title>Backgammon</title>
   </head>
   <body>
-    <h1>Backgammon</h1>
-    <div class="backgammon-game" id="backgammonGame">
-      <div class="board-container">
-        <div class="piece-containers" id="pieceContainers">
-          <div class="board-side">
-            <div class="row">
-              <div class="slot"></div>
-              <div class="slot"></div>
-              <div class="slot"></div>
-              <div class="slot"></div>
-              <div class="slot"></div>
-              <div class="slot"></div>
+    <div class="game-container">
+      <div class="game-info">
+        <h1>Backgammon</h1>
+        <div class="score-board">
+          <div class="side">
+            <div class="piece-container">
+              <div class="piece bg-white"></div>
             </div>
-            <div class="dice-container">
-              <button class="roll-btn white-btn" id="whiteRollBtn">
-                Roll!
-              </button>
-              <div class="dices hide">
-                <div class="dice"></div>
-                <div class="dice"></div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-            </div>
+            <h1 class="score-container" id="whiteScore">0</h1>
           </div>
-          <div class="middle-piece">
-            <div class="captured-pieces" id="capturedPieces"></div>
-          </div>
-          <div class="board-side">
-            <div class="row">
-              <div class="slot"></div>
-              <div class="slot"></div>
-              <div class="slot"></div>
-              <div class="slot"></div>
-              <div class="slot"></div>
-              <div class="slot"></div>
+          <div class="side">
+            <div class="piece-container">
+              <div class="piece bg-black"></div>
             </div>
-            <div class="dice-container">
-              <button class="roll-btn black-btn" id="blackRollBtn">
-                Roll!
-              </button>
-              <div class="dices hide">
-                <div class="dice black-dice"></div>
-                <div class="dice black-dice"></div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-              <div class="slot bottom"></div>
-            </div>
+            <h1 class="score-container" id="blackScore">0</h1>
           </div>
         </div>
-
-        <div class="board">
-          <div class="board-side">
-            <div class="row top">
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-            </div>
-            <div class="row bottom">
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-            </div>
-          </div>
-          <div class="middle-piece"></div>
-          <div class="board-side">
-            <div class="row top">
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-            </div>
-            <div class="row bottom">
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-              <div class="slot"><div class="triangle"></div></div>
-            </div>
-          </div>
-        </div>
+        <button class="btn" id="resetBtn">Reset Game</button>
       </div>
-      <div class="piece-pool" id="pool">
-        <div class="pool-curve">
-          <div class="side" id="whitePool"></div>
-          <div class="side bottom" id="blackPool"></div>
+      <div class="backgammon-game">
+        <div class="board-container">
+          <div class="piece-containers" id="pieceContainers">
+            <div class="board-side">
+              <div class="row">
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+              </div>
+              <div class="dice-container">
+                <button class="roll-btn white-btn" id="whiteRollBtn">
+                  Roll!
+                </button>
+                <div class="dices hide">
+                  <div class="dice"></div>
+                  <div class="dice"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+              </div>
+            </div>
+            <div class="middle-piece">
+              <div class="captured-pieces" id="capturedPieces"></div>
+            </div>
+            <div class="board-side">
+              <div class="row">
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+              </div>
+              <div class="dice-container">
+                <button class="roll-btn black-btn" id="blackRollBtn">
+                  Roll!
+                </button>
+                <div class="dices hide">
+                  <div class="dice black-dice"></div>
+                  <div class="dice black-dice"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+                <div class="slot bottom"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="board">
+            <div class="board-side">
+              <div class="row top">
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+              </div>
+              <div class="row bottom">
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+              </div>
+            </div>
+            <div class="middle-piece"></div>
+            <div class="board-side">
+              <div class="row top">
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+              </div>
+              <div class="row bottom">
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+                <div class="slot"><div class="triangle"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="piece-pool" id="pool">
+          <div class="pool-curve">
+            <div class="side" id="whitePool"></div>
+            <div class="side bottom" id="blackPool"></div>
+          </div>
         </div>
       </div>
     </div>

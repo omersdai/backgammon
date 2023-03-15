@@ -6,6 +6,7 @@ $boardColor: rgb(255, 179, 148);
 $darkSlotColor: rgb(150, 31, 1);
 $lightSlotColor: rgb(255, 193, 140);
 $poolColor: $purple;
+$scoreBoardColor: $purple;
 
 $boardRatio: calc(780 / 520);
 $boardSize: 800px;
@@ -15,11 +16,14 @@ $boardHeight: calc($boardWidth / $boardRatio);
 $poolHeight: $boardHeight;
 $poolWidth: calc($boardWidth / 6);
 
+$scoreBoardHeight: 150px;
+$scoreBoardWidth: 400px;
+
 $pieceSize: 50px;
 $diceSize: 50px;
 
 $boardBorder: 20px solid $borderColor;
-$thinBorder: 2px solid black;
+$thinBorder: 3px solid black;
 
 * {
   margin: 0;
@@ -37,6 +41,16 @@ body {
   min-height: 100vh;
   width: 100vw;
   background-color: steelblue;
+  overflow-x: hidden;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  padding: 30px;
 }
 
 .backgammon-game {
@@ -259,5 +273,50 @@ body {
     &.bottom {
       justify-content: flex-end;
     }
+  }
+}
+
+.game-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  transform: translateX(calc($poolWidth / -2));
+  .score-board {
+    height: $scoreBoardHeight;
+    width: $scoreBoardWidth;
+    background-color: $scoreBoardColor;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: row;
+  }
+
+  .side {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border: $thinBorder;
+    padding: 20px;
+  }
+
+  .side:first-child {
+    border-right: none;
+  }
+
+  .piece-container {
+    padding: 10px;
+  }
+
+  .btn {
+    @extend %btn;
+  }
+
+  .piece {
+    cursor: default;
   }
 }

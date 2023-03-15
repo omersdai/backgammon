@@ -13,20 +13,20 @@
   flex-direction: row;
 }
 
-.piece-containers .dice-container .roll-btn {
+.game-info .btn, .piece-containers .dice-container .roll-btn {
   font-size: 15px;
   padding: 15px 30px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
-.piece-containers .dice-container .roll-btn:active {
+.game-info .btn:active, .piece-containers .dice-container .roll-btn:active {
   transform: scale(95%);
 }
-.piece-containers .dice-container .roll-btn:hover {
+.game-info .btn:hover, .piece-containers .dice-container .roll-btn:hover {
   filter: brightness(0.95);
 }
-.piece-containers .dice-container .roll-btn:disabled {
+.game-info .btn:disabled, .piece-containers .dice-container .roll-btn:disabled {
   cursor: default;
   transform: none;
   filter: brightness(0.5);
@@ -151,6 +151,15 @@ body {
   min-height: 100vh;
   width: 100vw;
   background-color: steelblue;
+  overflow-x: hidden;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 30px;
 }
 
 .backgammon-game {
@@ -166,7 +175,7 @@ body {
   height: 50px;
   width: 50px;
   border-radius: 50%;
-  border: 2px solid black;
+  border: 3px solid black;
 }
 
 .board-container {
@@ -174,7 +183,7 @@ body {
   height: 800px;
   width: 1200px;
   box-sizing: content-box;
-  border: 2px solid black;
+  border: 3px solid black;
 }
 
 .piece-containers .slot {
@@ -196,7 +205,7 @@ body {
   gap: 10px;
 }
 .piece-containers .dice-container .roll-btn {
-  border: 2px solid black;
+  border: 3px solid black;
   margin-right: 20px;
 }
 .piece-containers .dice-container .white-btn {
@@ -286,7 +295,7 @@ body {
   background-color: rgb(255, 193, 140);
 }
 .board .board-side {
-  border: 2px solid black;
+  border: 3px solid black;
 }
 .board .middle-piece {
   background-color: brown;
@@ -294,20 +303,20 @@ body {
 .board .slot .triangle {
   height: 100%;
   width: 100%;
-  border: 2px solid black;
+  border: 3px solid black;
 }
 
 .piece-pool {
   height: 800px;
   width: 200px;
-  border: 2px solid black;
+  border: 3px solid black;
   padding: 10px;
   border-radius: 10px;
   background-color: rgb(161, 68, 173);
 }
 .piece-pool .pool-curve {
   border-radius: 10px;
-  border: 2px solid black;
+  border: 3px solid black;
   height: 100%;
   width: 100%;
   display: flex;
@@ -326,4 +335,39 @@ body {
 }
 .piece-pool .side.bottom {
   justify-content: flex-end;
+}
+
+.game-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  transform: translateX(-100px);
+}
+.game-info .score-board {
+  height: 150px;
+  width: 400px;
+  background-color: rgb(161, 68, 173);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+}
+.game-info .side {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: 3px solid black;
+  padding: 20px;
+}
+.game-info .side:first-child {
+  border-right: none;
+}
+.game-info .piece-container {
+  padding: 10px;
+}
+.game-info .piece {
+  cursor: default;
 }/*# sourceMappingURL=style.css.map */
