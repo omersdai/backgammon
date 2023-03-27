@@ -66,6 +66,8 @@ function startGame() {
   isGameOver = false;
   isFirstTurn = true;
 
+  whiteRollBtn.classList.remove(HIDE);
+  blackRollBtn.classList.remove(HIDE);
   whiteRollBtn.disabled = false;
   blackRollBtn.disabled = true;
   resetBtn.innerText = "Reset Game";
@@ -143,11 +145,11 @@ function movePiece(pieceEl, destinationSlotEl) {
 function poolPiece(pieceEl) {
   const color = pieceEl.getAttribute(COLOR);
   const originSlotEl = pieceEl.parentElement;
-  if (originSlotEl === capturedPiecesEl || hasCapturedPiece(color)) return;
+  if (originSlotEl === capturedPiecesEl) return;
 
   const poolEl = color === WHITE ? whitePoolEl : blackPoolEl;
   const slotIdx = getIdx(originSlotEl);
-  const dir = color === BLACK ? 1 : -1;
+  const dir = getDirection(color);
   rolls.sort((a, b) => a - b); // ascending order
 
   let idx = null;
@@ -171,23 +173,14 @@ function poolPiece(pieceEl) {
 }
 
 function isValidMove(color, distance) {
-  const dir = color === BLACK ? 1 : -1;
+  const dir = getDirection(color);
   distance = distance * dir;
-  console.log(
-    "isvalidMove returned ",
-    distance,
-    rolls.some((roll) => distance === roll)
-  );
+
   return rolls.some((roll) => distance === roll);
 }
 
 function isOccupied(color, destinationSlotEl) {
   const pieceElements = destinationSlotEl.children;
-
-  console.log(
-    "isOccupied returned",
-    pieceElements.length > 1 && color !== pieceElements[0].getAttribute(COLOR)
-  );
 
   return (
     pieceElements.length > 1 && color !== pieceElements[0].getAttribute(COLOR)
@@ -197,23 +190,9 @@ function isOccupied(color, destinationSlotEl) {
 function hasCapturedPiece(color) {
   const capturedPieceElements = Array.from(capturedPiecesEl.children);
 
-  console.log(
-    "hasCapturedPiece returned",
-    capturedPieceElements.some((piece) => color === piece.getAttribute(COLOR))
-  );
-
   return capturedPieceElements.some(
     (piece) => color === piece.getAttribute(COLOR)
   );
-}
-
-function canEnter(color) {
-  for (const roll of rolls) {
-    const destinationIdx = color === BLACK ? roll - 1 : slotCount - roll;
-    if (!isOccupied(color, slotElements[destinationIdx])) return true;
-  }
-
-  return false;
 }
 
 function isBlot(color, destinationSlotEl) {
@@ -226,10 +205,10 @@ function isBlot(color, destinationSlotEl) {
 function hasMoves(color) {
   if (hasCapturedPiece(color)) return canEnter(color);
 
+  const dir = getDirection(color);
+
   for (let i = 0; i < slotCount; i++) {
     if (hasPiece(slotElements[i], color)) {
-      const dir = color === BLACK ? 1 : -1;
-
       for (const roll of rolls) {
         const destinationIdx = i + roll * dir;
         if (
@@ -246,25 +225,28 @@ function hasMoves(color) {
   return false;
 }
 
+function canEnter(color) {
+  for (const roll of rolls) {
+    const destinationIdx = color === BLACK ? roll - 1 : slotCount - roll;
+    if (!isOccupied(color, slotElements[destinationIdx])) return true;
+  }
+
+  return false;
+}
+
 function canPool(color) {
+  if (hasCapturedPiece(color)) return false;
+
   const [start, end] = color === BLACK ? [0, slotCount - 6] : [6, slotCount];
 
   for (let i = start; i < end; i++) {
     if (hasPiece(slotElements[i], color)) return false;
   }
 
-  console.log("can pool returned true");
-
   return true;
 }
 
 function isPoolMove(color, destinationIdx) {
-  console.log(
-    "isPoolMove returned",
-    (color === BLACK && destinationIdx >= slotCount) ||
-      (color === WHITE && destinationIdx < 0)
-  );
-
   return (
     (color === BLACK && destinationIdx >= slotCount) ||
     (color === WHITE && destinationIdx < 0)
@@ -276,6 +258,13 @@ function hasPiece(slotEl, color) {
   return (
     0 < pieceElements.length && color === pieceElements[0].getAttribute(COLOR)
   );
+}
+
+function finishTurn() {
+  isWhiteTurn = !isWhiteTurn;
+  isRolledDice = false;
+  const oppositeRollBtn = isWhiteTurn ? whiteRollBtn : blackRollBtn;
+  oppositeRollBtn.disabled = false;
 }
 
 function winGame(color) {
@@ -353,6 +342,7 @@ function decideTurn(btnEl) {
   const roll = getRandomNumber(1, 6);
   const [dices, diceEl1, diceEl2] = getDices(btnEl);
   diceEl2.innerHTML = diceIcons[roll];
+  diceEl2.style.transform = "translate(0px, 0px)";
   dices.classList.remove(HIDE);
 
   if (btnEl === whiteRollBtn) {
@@ -379,14 +369,6 @@ function decideTurn(btnEl) {
       blackRollBtn.disabled = true;
     }
   }
-}
-
-function finishTurn() {
-  isWhiteTurn = !isWhiteTurn;
-  isRolledDice = false;
-  const oppositeRollBtn = isWhiteTurn ? whiteRollBtn : blackRollBtn;
-  oppositeRollBtn.disabled = false;
-  console.log("finished turn");
 }
 
 function showDice(diceEl, roll) {
@@ -443,6 +425,9 @@ function initializeGame() {
   poolContainerEl.addEventListener("drop", drop);
   poolContainerEl.addEventListener("dragover", dragOver);
 
+  whiteScoreEl.innerText = 0;
+  blackScoreEl.innerText = 0;
+
   startGame();
 }
 
@@ -482,6 +467,10 @@ function drop(e) {
 
 function dragOver(e) {
   e.preventDefault();
+}
+
+function getDirection(color) {
+  return color === BLACK ? 1 : -1;
 }
 
 function getDices(btnEl) {
